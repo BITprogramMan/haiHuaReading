@@ -6,6 +6,8 @@
 
 + [Dataset（密码：8mxi）](https://pan.baidu.com/s/1Fm97-1SVDyFbDT6s95zY0Q )
 
++ 这个项目总结了我的比赛经验，参考了冠军队伍的比赛代码。想要仔细了解冠军队伍思路，参考这里[（密码：fulk）](https://pan.baidu.com/s/19wOWeCZkDodsai-GHE6LyQ)
+
 ### 数据分析与可视化
 
 #### 一条样例数据如下：
