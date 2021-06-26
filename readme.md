@@ -52,24 +52,71 @@
 
 ​          抽取出训练集中的断句题用于古文 bert，并抽取测试集中的断句题。
 
++ 方案四：
+
+​        **数据扩充**
+
+​        c3:https://github.com/nlpdata/c3
+
+​        gcrc:https://github.com/jfzy-lab/GCRC
+
 ### Model
 
 + BertForMultipleChoice
 + ElectraForMultipleChoice
 
-使用对抗训练的方法：FGM与PGD，关于对抗训练的介绍参考这里：
+使用对抗训练的方法：FGM与PGD，关于对抗训练的介绍参考[这里](https://github.com/BITprogramMan/haiHuaReading/blob/master/%E5%AF%B9%E6%8A%97%E8%AE%AD%E7%BB%83.md)
+
+```python
+import torch
+class FGM():
+    def __init__(self, model):
+        self.model = model
+        self.backup = {}
+
+    def attack(self, epsilon=1., emb_name='emb.'):
+        # emb_name这个参数要换成你模型中embedding的参数名
+        for name, param in self.model.named_parameters():
+            if param.requires_grad and emb_name in name:
+                self.backup[name] = param.data.clone()
+                norm = torch.norm(param.grad)
+                if norm != 0 and not torch.isnan(norm):
+                    r_at = epsilon * param.grad / norm
+                    param.data.add_(r_at)
+
+    def restore(self, emb_name='emb.'):
+        # emb_name这个参数要换成你模型中embedding的参数名
+        for name, param in self.model.named_parameters():
+            if param.requires_grad and emb_name in name: 
+                assert name in self.backup
+                param.data = self.backup[name]
+        self.backup = {}
+
+```
+
++ 预训练模型的选择:
+
+BERT:https://huggingface.co/hfl/chinese-bert-wwm-ext
+
+RoBERT:https://huggingface.co/hfl/chinese-roberta-wwm-ext-large
+
+MacBERT:https://huggingface.co/hfl/chinese-macbert-large
+
+Guwen-BERT:https://github.com/Ethan-yt/guwenbert
+
+ALBERT:https://huggingface.co/voidful/albert_chinese_xxlarge
+
+### 评价指标
+
+![image-20210626152237706](figure/image-20210626152237706.png)
+
+### 运行
+
++ main.py给出baseline模型的框架，需要根据具体数据以及模型修改配置参数。
 
 
 
-### result
 
-
-
-
-
-
-
-### 代码运行
 
 
 
